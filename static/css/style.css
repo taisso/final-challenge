@@ -266,11 +266,10 @@ body {
   border-radius: 10px;
   opacity: 1;
   min-width: 280px;
-  height: 484px;
   display: grid;
   max-width: 315px;
   grid-template-columns: minmax(280px, 1fr);
-  grid-template-rows: auto 120px auto auto;
+  grid-template-rows: 50px auto 96px 96px;
 }
 
 .main .container-right .card-container .card-title {
@@ -281,14 +280,18 @@ body {
   opacity: 1;
   padding: 1rem;
 }
-
 .main .container-right .card-container .card-items {
+  padding-top: 1rem;
+}
+
+.main .container-right .card-container .card-items .item {
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: 15px 4px auto;
+  grid-template-rows: repeat(auto-fit, 120px);
   column-gap: 0.8rem;
   align-items: center;
   align-content: flex-start;
-  padding: 1rem;
+  padding: 0 1rem;
 }
 
 .main .container-right .card-container .card-items i {
@@ -327,7 +330,7 @@ body {
   letter-spacing: 0px;
   color: #707070;
   text-transform: uppercase;
-  padding: 1rem;
+  padding: 0 1rem 0 1.5rem;
 }
 
 .main .container-right .card-container .total-value strong {
