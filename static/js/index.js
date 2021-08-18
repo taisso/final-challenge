@@ -2,16 +2,23 @@
   "use strict";
 
   const $balls = doc.querySelectorAll(".balls span");
-  const $buttonsGame = doc.querySelectorAll(".tags button");
+  const $tag = doc.querySelector(".tags");
   const $buttonCart = doc.querySelector(".button-right");
   const $cardItems = doc.querySelector(".card-items");
   const chosenGame = { title: "", ballsSelected: [] };
 
   function app() {
     return {
-      run() {
+      async run() {
+        await this.load();
         this.initEvents();
       },
+
+      async load() {
+        const data = await this.gameInfo();
+        this.setButtonsGame(data);
+      },
+
 
       initEvents() {
         Array.prototype.forEach.call($balls, (ball) => {
@@ -21,6 +28,13 @@
           button.addEventListener("click", this.handleButtonsGame);
         });
         $buttonCart.addEventListener("click", this.handleAddInCart);
+      },
+
+      async gameInfo() {
+        return fetch("./static/js/games.json")
+          .then(async (response) => await response.json())
+          .then((data) => data)
+          .catch((err) => alert(err));
       },
 
       handleSelectBalls() {
@@ -80,6 +94,36 @@
           return alert("Selecione os números!");
         }
         app().createElment();
+      },
+
+
+      createSyle(css) {
+        const style = doc.createElement("style");
+        style.appendChild(doc.createTextNode(css));
+        return style;
+      },
+
+      classButton(color, index) {
+        const css = this.generateStyleOfButton(color, index);
+        return this.createSyle(css);
+      },
+
+      createButtons({ type, color }, index) {
+        const $button = doc.createElement("button");
+        $button.append(type);
+
+        $button.appendChild(this.classButton(color, index));
+        $tag.appendChild($button);
+      },
+
+      buttonDefault(types) {
+        $tag.children[0].style.backgroundColor = types[0].color;
+        $tag.children[0].style.color = "#fff";
+      },
+
+      setButtonsGame({ types }) {
+        types.forEach(this.createButtons.bind(this));
+        this.buttonDefault(types);
       },
     };
   }
