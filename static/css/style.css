@@ -18,11 +18,11 @@ body {
 }
 
 .container {
-  height: 100%;
+  height: 100vh;
   background-color: var(--aliceblue);
   display: grid;
   grid-template-columns: minmax(540px, 1fr);
-  grid-template-rows: 70px 1fr;
+  grid-template-rows: 74px 1fr;
   row-gap: 3.4rem;
   grid-template-areas:
     "header header"
@@ -46,7 +46,6 @@ body {
 
 .header nav {
   display: grid;
-  height: 100%;
   grid-auto-flow: column;
   justify-content: space-between;
   align-items: center;
@@ -63,19 +62,36 @@ body {
   padding-right: 4rem;
 }
 
+.header nav .nav-left, .nav-right {
+
+}
+
 .header nav div li {
-  font: italic normal bold 1.3rem/4.4rem Helvetica Neue;
+  font: italic normal bold 1.3rem/4.13rem Helvetica Neue;
   letter-spacing: 0px;
   color: var(--gray);
   opacity: 1;
+  height: 80%;
   list-style: none;
 }
 
 .header nav .nav-left .title {
-  font: italic normal bold 2.8rem/4.4rem Helvetica Neue;
+  font: italic normal bold 2.8rem/4.13rem Helvetica Neue;
   letter-spacing: 0px;
   color: var(--gray);
   opacity: 1;
+}
+
+.header nav .line-horizontal {
+  display: none;
+  background: #b5c401 0% 0% no-repeat padding-box;
+  border-radius: 6px;
+  opacity: 1;
+  height: .46rem;
+}
+
+.header nav .active-nav {
+  display: block;
 }
 
 .main {
@@ -85,10 +101,23 @@ body {
   background-color: var(--aliceblue);
 }
 
+@media (max-width: 1322px) {
+  .main {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(auto-fit, 1fr);
+  }
+}
+
 .main .container-left p {
   letter-spacing: 0px;
   opacity: 1;
   line-height: 0;
+}
+
+.main .container-left {
+  display: grid;
+  row-gap: 1.3rem;
+  max-height: 673px;
 }
 
 .main .container-left .text-one {
@@ -103,11 +132,13 @@ body {
   color: var(--dimgray);
 }
 
-.main .container-left .tags span {
-  font: italic normal bold 0.9rem/4.4rem Helvetica Neue;
+.main .container-left .tags button {
+  font: italic normal bold 0.9rem Helvetica Neue;
   border-radius: 100px;
   padding: 0.4rem 1.2rem;
   opacity: 1;
+  outline: none;
+  cursor: pointer;
 }
 
 .main .container-left .tags .tag-one {
@@ -115,6 +146,11 @@ body {
   border: 2px solid var(--purple);
   color: var(--purple);
   margin-right: 1rem;
+}
+
+.main .container-left .tags .tag-one:hover {
+  color: #fff;
+  background: var(--purple);
 }
 
 .main .container-left .tags .tag-two {
@@ -126,24 +162,33 @@ body {
 
 .main .container-left .tags .tag-three {
   background: #ffffff 0% 0% no-repeat padding-box;
-  font: italic normal bold 14px/70px Helvetica Neue;
+  font: italic normal bold 14px Helvetica Neue;
   border: 2px solid #f79c31;
   color: #f79c31;
+}
+
+.main .container-left .tags .tag-three:hover {
+  color: #fff;
+  background: #f79c31;
 }
 
 .main .container-left .text-three {
   font: italic normal normal 1.1rem/1.5rem Helvetica Neue;
   color: #868686;
+  max-width: 620px;
 }
 
-.main .container-left .balls {
+.container-balls {
+  max-width: 766px;
+}
+
+.main .container-left .container-balls .balls {
   display: grid;
   grid-template-columns: repeat(auto-fit, 63px);
   grid-template-rows: repeat(4, 65px);
   gap: 0.8rem;
-  padding: 1rem 0;
-  max-width: 721px;
 }
+
 
 .main .container-left .balls span {
   background: #adc0c4 0% 0% no-repeat padding-box;
@@ -156,6 +201,63 @@ body {
   justify-items: center;
   align-items: center;
   min-height: 65px;
+}
+
+.main .container-left .container-balls .balls span:hover {
+  background: #fff;
+  color: #adc0c4;
+  cursor: pointer;
+  border: 1px solid #adc0c4;
+}
+
+.main .container-left .buttons {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: 52px;
+  max-width: 660px;
+  column-gap: 3rem;
+  padding: 1rem 0;
+}
+
+.main .container-left .buttons .buttons-left {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-auto-flow: column;
+  column-gap: 2rem;
+}
+
+.main .container-left .buttons .buttons-left .button-left {
+  font: normal normal medium 16px/24px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #27c3;
+  border: 1px solid #27c383;
+  border-radius: 10px;
+  opacity: 1;
+  color: #27c383;
+  cursor: pointer;
+}
+
+.main .container-left .buttons .buttons-left .button-left:hover {
+  background-color: #27c383;
+  color: #fff;
+}
+
+.main .container-left .buttons .button-right {
+  width: 209px;
+  justify-self: end;
+  background: #27c383 0% 0% no-repeat padding-box;
+  border: 1px solid #27c383;
+  border-radius: 10px;
+  opacity: 1;
+  cursor: pointer;
+  font: normal normal bold 16px/24px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #ffffff;
+}
+
+.main .container-left .buttons .button-right:hover {
+  color: #27c383;
+  background-color: #ffffff;
 }
 
 .main .container-right .card-container {
@@ -172,7 +274,7 @@ body {
 }
 
 .main .container-right .card-container .card-title {
-  font: italic normal bold 24px/3rem Helvetica Neue;
+  font: italic normal bold 1.5rem/3rem Helvetica Neue;
   letter-spacing: 0px;
   color: #707070;
   text-transform: uppercase;
@@ -187,6 +289,27 @@ body {
   align-items: center;
   align-content: flex-start;
   padding: 1rem;
+}
+
+.main .container-right .card-container .card-items i {
+  cursor: pointer;
+}
+
+.main .container-right .card-container .card-items .item-description {
+  font: italic normal bold 15px/20px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #868686;
+  opacity: 1;
+  display: grid;
+  row-gap: 0.5rem;
+}
+
+.main .container-right .card-container .card-items .item-description .tag-name {
+  text-align: center;
+  font: italic normal bold 16px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #7f3992;
+  opacity: 1;
 }
 
 .main .container-right .card-container .card-items .line-vertical {
@@ -208,7 +331,7 @@ body {
 }
 
 .main .container-right .card-container .total-value strong {
-  font: italic normal bold 24px/85px Helvetica Neue;
+  font: italic normal bold 1.5rem/5.32rem Helvetica Neue;
   letter-spacing: 0px;
   color: #707070;
   text-transform: uppercase;
@@ -220,12 +343,17 @@ body {
   opacity: 1;
   outline: none;
   text-align: center;
-  font: italic normal bold 35px/70px Helvetica Neue;
+  font: italic normal bold 2.2rem/4.4rem Helvetica Neue;
   letter-spacing: 0px;
   color: #27c383;
   width: 100%;
   border-radius: 0 0 10px 10px;
   cursor: pointer;
+}
+
+.confirmed:hover {
+  background-color: #27c383;
+  color: #f4f4f4;
 }
 
 @media (max-width: 1080px) {
