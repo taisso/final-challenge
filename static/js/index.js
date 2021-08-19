@@ -19,7 +19,6 @@
         this.setButtonsGame(data);
       },
 
-
       initEvents() {
         Array.prototype.forEach.call($balls, (ball) => {
           ball.addEventListener("click", this.handleSelectBalls);
@@ -42,19 +41,44 @@
         app().ballsStyle.call(this);
       },
 
-      ballsStyle() {
+      getStyles(backColor, color) {
         const styles = {
-          backgroundColor: "#fff",
-          color: "#adc0c4",
-          border: "1px solid #adc0c4",
+          backgroundColor: backColor,
+          color,
+          border: `1px solid ${color}`,
         };
-
         Object.keys(styles).forEach((key) => (this.style[key] = styles[key]));
+      },
+
+      ballsStyle() {
+        app().getStyles.call(this, "#fff", "#adc0c4");
       },
 
       handleButtonsGame() {
         chosenGame.title = this.innerText;
         console.log(chosenGame);
+      },
+
+      async handleButtonRight() {
+        const children = $balls.children;
+        const length = children.length;
+        const data = await this.findGame(chosenGame.title);
+
+        chosenGame.ballsSelected = [];
+        while (chosenGame.ballsSelected.length <= data["max-number"]) {
+          const index = parseInt(this.getRandomArbitrary(0, length));
+          chosenGame.ballsSelected.push(children[index].textContent);
+          this.getStyles.call(children[index], "#fff", "#adc0c4");
+        }
+      },
+
+      leftPad(value, totalWidth, paddingChar) {
+        var length = totalWidth - value.toString().length + 1;
+        return Array(length).join(paddingChar || "0") + value;
+      },
+
+      getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
       },
 
       createElment(data) {
@@ -95,7 +119,6 @@
         }
         app().createElment();
       },
-
 
       createSyle(css) {
         const style = doc.createElement("style");
