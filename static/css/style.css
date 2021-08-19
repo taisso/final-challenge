@@ -98,13 +98,6 @@ body {
   background-color: var(--aliceblue);
 }
 
-@media (max-width: 1322px) {
-  .main {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(auto-fit, 1fr);
-  }
-}
-
 .main .container-left p {
   letter-spacing: 0px;
   opacity: 1;
