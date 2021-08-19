@@ -19,6 +19,7 @@ body {
 
 .container {
   height: 100vh;
+  overflow: auto;
   background-color: var(--aliceblue);
   display: grid;
   grid-template-columns: minmax(540px, 1fr);
@@ -60,10 +61,6 @@ body {
 .header nav .nav-left li,
 .nav-right li {
   padding-right: 4rem;
-}
-
-.header nav .nav-left, .nav-right {
-
 }
 
 .header nav div li {
@@ -118,6 +115,7 @@ body {
   display: grid;
   row-gap: 1.3rem;
   max-height: 673px;
+  grid-template-rows: repeat(6, auto);
 }
 
 .main .container-left .text-one {
@@ -133,43 +131,14 @@ body {
 }
 
 .main .container-left .tags button {
+  background: #ffffff 0% 0% no-repeat padding-box;
   font: italic normal bold 0.9rem Helvetica Neue;
   border-radius: 100px;
   padding: 0.4rem 1.2rem;
   opacity: 1;
   outline: none;
   cursor: pointer;
-}
-
-.main .container-left .tags .tag-one {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 2px solid var(--purple);
-  color: var(--purple);
   margin-right: 1rem;
-}
-
-.main .container-left .tags .tag-one:hover {
-  color: #fff;
-  background: var(--purple);
-}
-
-.main .container-left .tags .tag-two {
-  background: #01ac66 0% 0% no-repeat padding-box;
-  border: 2px solid #01ac66;
-  color: #ffffff;
-  margin-right: 1rem;
-}
-
-.main .container-left .tags .tag-three {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  font: italic normal bold 14px Helvetica Neue;
-  border: 2px solid #f79c31;
-  color: #f79c31;
-}
-
-.main .container-left .tags .tag-three:hover {
-  color: #fff;
-  background: #f79c31;
 }
 
 .main .container-left .text-three {
@@ -185,7 +154,7 @@ body {
 .main .container-left .container-balls .balls {
   display: grid;
   grid-template-columns: repeat(auto-fit, 63px);
-  grid-template-rows: repeat(4, 65px);
+  grid-template-rows: repeat(auto-fit, 65px);
   gap: 0.8rem;
 }
 
@@ -204,8 +173,8 @@ body {
 }
 
 .main .container-left .container-balls .balls span:hover {
-  background: #fff;
-  color: #adc0c4;
+  background: #fff !important;
+  color: #adc0c4 !important;
   cursor: pointer;
   border: 1px solid #adc0c4;
 }
@@ -307,6 +276,10 @@ body {
   row-gap: 0.5rem;
 }
 
+.main .container-right .card-container .card-items .item-description p {
+  word-break: break-all;
+}
+
 .main .container-right .card-container .card-items .item-description .tag-name {
   text-align: center;
   font: italic normal bold 16px Helvetica Neue;
@@ -330,7 +303,7 @@ body {
   letter-spacing: 0px;
   color: #707070;
   text-transform: uppercase;
-  padding: 0 1rem 0 1.5rem;
+  padding: 0 1rem;
 }
 
 .main .container-right .card-container .total-value strong {
