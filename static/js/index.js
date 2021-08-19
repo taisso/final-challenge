@@ -120,6 +120,19 @@
         app().createElment();
       },
 
+      generateStyleOfButton(color, index) {
+        return `
+        .main .container-left .tags button:nth-of-type(${index + 1}) {
+          color: ${color};
+          border: 2px solid ${color}
+        }
+        .main .container-left .tags button:hover:nth-of-type(${index + 1}) {
+          background: ${color} !important;
+          color: #fff !important;
+        }
+        `;
+      },
+
       createSyle(css) {
         const style = doc.createElement("style");
         style.appendChild(doc.createTextNode(css));
