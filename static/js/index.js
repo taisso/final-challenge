@@ -29,6 +29,7 @@
           .get(0)
           .addEventListener("click", this.handleCompleteGame.bind(this));
         $buttons.get(1).addEventListener("click", this.handleClearGame);
+
       },
 
       async loadBalls() {
@@ -36,8 +37,7 @@
         const data = await win.Global.findGame(win.Global.chosenGame.title);
 
         if (data) {
-          $pText.childNodes[$pText.childNodes.length - 1].textContent =
-            data.description;
+          app().createDescription(data)
           for (let i = 1; i <= data.range; i++) {
             const value = parseInt(win.Global.getRandomArbitrary(1, 100));
             const resul = win.Global.leftPad(value, 2);
@@ -46,6 +46,10 @@
 
           win.DOM(".balls span").on("click", this.handleSelectBalls);
         }
+      },
+
+      createDescription(data) {
+        $pText.innerHTML = `<strong>Fill your bet</strong><br />${data.description}`
       },
 
       async gameInfo() {

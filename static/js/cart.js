@@ -55,12 +55,16 @@
 
         Cart().descTotalValue(Number(resul));
         this.parentNode.remove();
-    },
-    
-    handleSave() {
-        alert('Pronto! Tenha uma boa sorte!')
-        win.Global.chosenGame.totalVal = 0
-        $cardItems.innerHTML = ''
+      },
+
+      handleSave() {
+        if (win.Global.chosenGame.totalVal === 0) {
+          return alert('Nada foi adicionado no carrinho!')
+        }
+
+        alert("Pronto! Tenha uma boa sorte!");
+        win.Global.chosenGame.totalVal = 0;
+        $cardItems.innerHTML = "";
         $totalValue.innerHTML = `<strong>cart</strong> TOTAL: R$ 0,00`;
       },
 
