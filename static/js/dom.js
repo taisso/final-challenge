@@ -39,17 +39,11 @@
   DOM.isNull = function (param) {
     return (
       Object.prototype.toString.call(param) === "[object Null]" ||
-      Object.prototype.toString.call(param) === "[object Undifined]"
+      Object.prototype.toString.call(param) === "[object Undefined]"
     );
   };
 
   DOM.prototype.on = function (eventType, callback) {
-    Array.prototype.forEach.call(this.element, function (element) {
-      element.addEventListener(eventType, callback);
-    });
-  };
-
-  DOM.prototype.onChilds = function (eventType, callback) {
     Array.prototype.forEach.call(this.element, function (element) {
       element.addEventListener(eventType, callback);
     });

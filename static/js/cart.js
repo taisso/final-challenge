@@ -10,7 +10,7 @@
   function Cart() {
     return {
       run() {
-        this.addCart();
+        $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
         this.initEvents();
       },
 
@@ -22,15 +22,22 @@
       addCart(value = 0) {
         win.Global.chosenGame.totalVal += value;
         const resul = win.Global.formatNumber(win.Global.chosenGame.totalVal);
-
         $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
       },
 
       descTotalValue(value = 0) {
         if (win.Global.chosenGame.totalVal >= 0) {
           win.Global.chosenGame.totalVal -= value;
-          const resul = win.Global.formatNumber(win.Global.chosenGame.totalVal);
-          $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
+          const num = win.Global.chosenGame.totalVal;
+
+          if (num <= 0) {
+            $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
+          } else {
+            const resul = win.Global.formatNumber(
+              win.Global.chosenGame.totalVal
+            );
+            $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
+          }
         }
       },
 
@@ -38,14 +45,21 @@
         if (!win.Global.chosenGame.title) {
           return alert("Selecione o tipo do game!");
         }
-        if (win.Global.chosenGame.ballsSelected.length === 0) {
+        if (win.Global.chosenGame.ballsSelected.size === 0) {
           return alert("Selecione os números!");
         }
+        const data = await win.Global.findGame(win.Global.chosenGame.title);
+
+        if (win.Global.chosenGame.ballsSelected.size < data["max-number"]) {
+          return alert(
+            `É necessário escolher exatamente ${data["max-number"]}`
+          );
+        }
+
         const cart = Cart();
-        cart.createElment();
+        cart.createElment(data);
         win.Global.removeBalls($balls, win.Global.chosenGame);
 
-        const data = await win.Global.findGame(win.Global.chosenGame.title);
         cart.addCart(data.price);
       },
 
@@ -59,16 +73,16 @@
 
       handleSave() {
         if (win.Global.chosenGame.totalVal === 0) {
-          return alert('Nada foi adicionado no carrinho!')
+          return alert("Nada foi adicionado no carrinho!");
         }
 
         alert("Pronto! Tenha uma boa sorte!");
         win.Global.chosenGame.totalVal = 0;
         $cardItems.innerHTML = "";
-        $totalValue.innerHTML = `<strong>cart</strong> TOTAL: R$ 0,00`;
+        $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
       },
 
-      createElment() {
+      createElment({ color }) {
         const fragment = doc.createDocumentFragment();
 
         const $div = doc.createElement("div");
@@ -81,17 +95,17 @@
 
         $div.setAttribute("class", "item");
         $div2.setAttribute("class", "item-description");
-        $span.setAttribute("class", "line-vertical");
         $span2.setAttribute("class", "tag-name");
+        $span.setAttribute("class", "line-vertical");
+        $span.style.backgroundColor = color;
+        $span2.style.color = color;
         $i.setAttribute("class", "bi bi-trash");
         $i.addEventListener("click", Cart().handleRemoveCart);
         $span2.innerText = win.Global.chosenGame.title;
         $p2.appendChild($span2);
 
-        $p.innerText =
-          win.Global.chosenGame.ballsSelected[0] +
-          ", " +
-          win.Global.chosenGame.ballsSelected.splice(1).join(",");
+        const array = Array.from(win.Global.chosenGame.ballsSelected);
+        $p.innerText = array[0] + ", " + array.splice(1).join(",");
         $p2.append(" " + win.Global.chosenGame.price);
         $div2.append($p, $p2);
         $div.append($i, $span, $div2);

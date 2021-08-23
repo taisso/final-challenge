@@ -5,7 +5,6 @@
   const $tag = win.DOM(".tags").get();
   const $buttons = DOM(".button-left");
   const $buttonCart = DOM(".button-right");
-  const $pText = DOM(".text-three").get();
 
   function app() {
     return {
@@ -17,39 +16,17 @@
       async preload() {
         win.Global.dataGame = await this.gameInfo();
         this.setButtonsGame(win.Global.dataGame);
-        await this.loadBalls();
-        Cart.run()
+        await win.Ball.run();
+        win.Cart.run();
       },
 
       initEvents() {
-        win.DOM(".balls span").on("click", this.handleSelectBalls);
         win.DOM(".tags button").on("click", this.handleButtonsGame);
         $buttonCart.on("click", this.handleAddInCart);
         $buttons
           .get(0)
           .addEventListener("click", this.handleCompleteGame.bind(this));
         $buttons.get(1).addEventListener("click", this.handleClearGame);
-
-      },
-
-      async loadBalls() {
-        $balls.innerHTML = "";
-        const data = await win.Global.findGame(win.Global.chosenGame.title);
-
-        if (data) {
-          app().createDescription(data)
-          for (let i = 1; i <= data.range; i++) {
-            const value = parseInt(win.Global.getRandomArbitrary(1, 100));
-            const resul = win.Global.leftPad(value, 2);
-            $balls.innerHTML += `<span>${resul}</span>`;
-          }
-
-          win.DOM(".balls span").on("click", this.handleSelectBalls);
-        }
-      },
-
-      createDescription(data) {
-        $pText.innerHTML = `<strong>Fill your bet</strong><br />${data.description}`
       },
 
       async gameInfo() {
@@ -59,61 +36,39 @@
           .catch((err) => alert(err));
       },
 
-      async handleSelectBalls() {
-        await app().limitBalls.call(this);
-      },
-
       async handleCompleteGame() {
         const children = $balls.children;
         const length = children.length;
         const data = await win.Global.findGame(win.Global.chosenGame.title);
+        while (
+          win.Global.chosenGame.ballsSelected.size < data["max-number"]
+        ) {
 
-        while (win.Global.chosenGame.ballsSelected.length <= data["max-number"]) {
           const index = parseInt(win.Global.getRandomArbitrary(0, length));
-          win.Global.chosenGame.ballsSelected.push(children[index].textContent);
-          win.Global.getStyles.call(children[index], "#fff", "#adc0c4");
+          win.Global.chosenGame.ballsSelected.add(children[index].textContent);
+          win.Global.getStyles.call(children[index], data.color, "#fff");
         }
       },
 
       handleClearGame() {
-        win.Global.removeBalls($balls, win.Global.chosenGame)
+        win.Global.removeBalls($balls, win.Global.chosenGame);
       },
 
       async handleButtonsGame() {
         const newApp = app();
-        win.Global.chosenGame.title = this.innerText;
-        await newApp.buttonsGames.call(
-          this,
-          await win.Global.findGame( this.innerText)
-        );
-        await newApp.loadBalls();
-      },
+        const data = await win.Global.findGame(this.innerText);
+        const title = win.Global.chosenGame.title;
+        const length = win.Global.chosenGame.ballsSelected.size;
 
-      async limitBalls(alertActive = true) {
-        const data = await win.Global.findGame(win.Global.chosenGame.title);
-        if (
-          alertActive &&
-          data &&
-          data["max-number"] < win.Global.chosenGame.ballsSelected.length
-        ) {
-          return alert(
-            `Limite do game ${data.type} é de ${data["max-number"]} bolas`
-          );
-        }
-
-        win.Global.chosenGame.ballsSelected.push(this.innerText);
-        app().ballsStyle.call(this);
-      },
-
-      ballsStyle() {
-        win.Global.getStyles.call(this, "#fff", "#adc0c4");
-      },
-
-
-      removeStyle({ type, color }, index, children) {
-        if (this.innerText !== type) {
-          children[index].style.backgroundColor = "#fff";
-          children[index].style.color = color;
+        if (title !== this.innerText) {
+          if (length >= 1) {
+            return alert(
+              `Antes de mudar para ${title} adicione no carrinho primeiro`
+            );
+          }
+          win.Global.chosenGame.title = this.innerText;
+          await newApp.buttonsGames.call(this, data);
+          await win.Ball.loadBalls();
         }
       },
 
@@ -122,10 +77,21 @@
           background: find.color,
           color: "#fff",
         };
-
-        win.Global.chosenGame.ballsSelected = [];
-        win.Global.chosenGame.price = win.Global.formatNumber(find.price);
         Object.keys(styles).forEach((key) => (this.style[key] = styles[key]));
+
+        app().removeUnselected.call(this, find);
+      },
+
+      removeStyle({ type, color }, index, children) {
+        if (this.innerText !== type) {
+          children[index].style.backgroundColor = "#fff";
+          children[index].style.color = color;
+        }
+      },
+
+      removeUnselected(find) {
+        win.Global.chosenGame.ballsSelected.clear();
+        win.Global.chosenGame.price = win.Global.formatNumber(find.price);
         const children = $tag.children;
         win.Global.dataGame.types.forEach(({ type, color }, index) => {
           app().removeStyle.call(this, { type, color }, index, children);
@@ -145,7 +111,7 @@
         `;
       },
 
-      createSyle(css) {
+      createStyle(css) {
         const style = doc.createElement("style");
         style.appendChild(doc.createTextNode(css));
         return style;
@@ -153,7 +119,7 @@
 
       classButton(color, index) {
         const css = this.generateStyleOfButton(color, index);
-        return this.createSyle(css);
+        return this.createStyle(css);
       },
 
       createButtons({ type, color }, index) {
@@ -176,7 +142,6 @@
         types.forEach(this.createButtons.bind(this));
         this.buttonDefault(types);
       },
-      
     };
   }
 

@@ -1,6 +1,7 @@
 (function (win) {
 
-  const chosenGame = { title: "", ballsSelected: [], price: 0, totalVal: 0 };
+  const ballsSelected = new Set()
+  const chosenGame = { title: "", ballsSelected, price: 0, totalVal: 0 };
   let dataGame;
 
   function leftPad(value, totalWidth, paddingChar) {
@@ -40,7 +41,7 @@
   }
 
   function removeBalls($balls, chosenGame) {
-    chosenGame.ballsSelected = [];
+    chosenGame.ballsSelected.clear();
     const children = $balls.children;
     Array.prototype.forEach.call(children, (child) => {
       getStyles.call(child, "#adc0c4", "#fff");
