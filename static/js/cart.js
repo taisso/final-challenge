@@ -5,12 +5,13 @@
   const $buttonCart = DOM(".button-right");
   const $cardItems = DOM(".card-items").get();
   const $totalValue = DOM(".total-value").get();
+  const $cartEmpty = DOM('.cart-empty').get()
   const $save = DOM(".confirmed");
 
   function Cart() {
     return {
       run() {
-        $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
+        this.addCart()
         this.initEvents();
       },
 
@@ -23,19 +24,23 @@
         win.Global.chosenGame.totalVal += value;
         const resul = win.Global.formatNumber(win.Global.chosenGame.totalVal);
         $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
+        const total = win.Global.chosenGame.totalVal
+        const display = total <= 0 ? 'inline' : 'none'
+        $cartEmpty.style.display = display
       },
 
       descTotalValue(value = 0) {
         if (win.Global.chosenGame.totalVal >= 0) {
           win.Global.chosenGame.totalVal -= value;
           const num = win.Global.chosenGame.totalVal;
+          const resul = win.Global.formatNumber(num);
 
           if (num <= 0) {
-            $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
-          } else {
-            const resul = win.Global.formatNumber(
-              win.Global.chosenGame.totalVal
-            );
+            $cartEmpty.style.display = 'inline'
+            $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
+          } 
+          else {
+            $cartEmpty.style.display = 'none'
             $totalValue.innerHTML = `<strong>cart</strong> TOTAL: ${resul}`;
           }
         }
@@ -79,7 +84,8 @@
         alert("Pronto! Tenha uma boa sorte!");
         win.Global.chosenGame.totalVal = 0;
         $cardItems.innerHTML = "";
-        $totalValue.innerHTML = `<strong>cart</strong> VAZIO!`;
+        $cartEmpty.style.display = 'inline'
+        win.Global.removeBalls($balls, win.Global.chosenGame);
       },
 
       createElment({ color }) {
